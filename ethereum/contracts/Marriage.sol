@@ -1,48 +1,49 @@
 pragma solidity ^0.4.19;
 
-contract MarriageRegistry {
-    address [] public registeredMarriages;
+contract CommunityAwardRegistry {
+    address [] public registeredAwards;
     event ContractCreated(address contractAddress);
 
-    function createMarriage(string _leftName, string _leftVows, string _rightName, string _rightVows, uint _date) public {
-        address newMarriage = new Marriage(msg.sender, _leftName, _leftVows, _rightName, _rightVows, _date);
-        emit ContractCreated(newMarriage);
-        registeredMarriages.push(newMarriage);
+    function createAward(string _awardTitle, string _nominatorName, string _awardInfo, string _recipientName, address _recipientAddr, uint _date) public {
+        address newAward = new Award(msg.sender, _nominatorName, _recipientAddr, _awardTitle, _awardInfo, _recipientName, _date);
+        emit ContractCreated(Award);
+        registeredAwards.push(newAward);
     }
 
-    function getDeployedMarriages() public view returns (address[]) {
-        return registeredMarriages;
+    function getDeployedAwards() public view returns (address[]) {
+        return registeredAwards;
     }
 }
 
 /**
- * @title Marriage
- * @dev The Marriage contract provides basic storage for names and vows, and has a simple function
- * that lets people ring a bell to celebrate the wedding
+ * @title Award
+ * @dev The Award contract provides basic storage for names and information, and has a simple function
+ * that lets people endorse the award as well as endorse endorsements.
  */
-contract Marriage {
+contract Award {
 
-    event weddingBells(address ringer, uint256 count);
+    event endorse(address endorser, uint256 count);
 
-    // Owner address
-    address public owner;
-
-    /// Marriage Vows
-    string public leftName;
-    string public leftVows;
-    string public rightName;
-    string public rightVows;
-    // date public marriageDate;
-    uint public marriageDate;
+    // Recipient address
+    address public recipient;
+    string public recipientName;
     
-    // Bell counter
-    uint256 public bellCounter;
+    // Endorsers
+    address [] public endorserAddresses;
+    string [] public endorserNames;
+
+    string public awardTitle;
+    string public awardInfo;
+
+    uint public awardDate;
+    
+    uint256 public endorsmentCounter;
 
     /**
     * @dev Throws if called by any account other than the owner
     */
-    modifier onlyOwner() {
-        require(msg.sender == owner);
+    modifier onlyRecepient() {
+        require(msg.sender == recipient);
         _;
     }
 
@@ -50,13 +51,18 @@ contract Marriage {
     * @dev Constructor sets the original `owner` of the contract to the sender account, and
     * commits the marriage details and vows to the blockchain
     */
-    constructor(address _owner, string _leftName, string _leftVows, string _rightName, string _rightVows, uint _date) public {
+    
+    constructor(address _nominatorAddr, string _nominatorName, address _recipientAddr, string _awardTitle, string _awardInfo, string _recipientName, uint _date) public {
         // TODO: Assert statements for year, month, day
-        owner = _owner;
-        leftName = _leftName;
-        leftVows = _leftVows;
-        rightName = _rightName;
-        rightVows = _rightVows;
+        recipient = _recipientAddr;
+        recipientName = _recipientName;
+        
+        endorserAddresses.push(_nominatorAddr);
+        endorserNames.push(_nominatorName);
+        
+        awardTitle = _awardTitle;
+        awardInfo = _awardInfo;
+
         marriageDate = _date; 
     }
 
@@ -73,16 +79,18 @@ contract Marriage {
     * @dev ringBell is a payable function that allows people to celebrate the couple's marriage, and
     * also send Ether to the marriage contract
     */
-    function ringBell() public payable {
-        bellCounter = add(1, bellCounter);
-        emit weddingBells(msg.sender, bellCounter);
+    function endorse(string _endorserName) public payable {
+        endorsmentCounter = add(1, endorsmentCounter);
+        endorserAddresses.push(msg.sender);
+        endorserNames.push(_endorserName);
+        emit endorsement(msg.sender, endorsmentCounter);
     }
 
     /**
     * @dev withdraw allows the owner of the contract to withdraw all ether collected by bell ringers
     */
-    function collect() external onlyOwner {
-        owner.transfer(address(this).balance);
+    function collect() external onlyRecepient {
+        recipient.transfer(address(this).balance);
     }
 
     /**
@@ -92,20 +100,32 @@ contract Marriage {
         return address(this).balance;
     }
 
+    function getEndorserAddress(uint8 x) constant returns (address)
+    {
+        return endorserAddresses[x];
+    }
+
+    function getEndorserName(uint8 x) constant returns (string)
+    {
+        return endorserName[x];
+    }
+
+    
     /**
     * @dev returns contract metadata in one function call, rather than separate .call()s
     * Not sure if this works yet
-    */
-    function getMarriageDetails() public view returns (
-        address, string, string, string, string, uint, uint256) {
+    
+    function getAwardDetails() public view returns (
+        address, string, string, string, address [], string [], uint, uint256) {
         return (
-            owner,
-            leftName,
-            leftVows,
-            rightName,
-            rightVows,
-            marriageDate,
-            bellCounter
+            recipient,
+            recipientName,
+            awardTitle,
+            awardInfo,
+            endorserAddresses,
+            endorserNames,
+            awardDate,
+            endorsmentCounter
         );
-    }
+    } */
 }
