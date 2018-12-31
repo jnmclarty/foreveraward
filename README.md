@@ -1,12 +1,14 @@
-# Forevermore
-Forevermore is a smart contract, with a React front-end, that lets you commit your marriage vows to the blockchain. Read the motivation for this project [here](https://medium.com/@nicolezhu/why-we-committed-our-marriage-vows-to-the-blockchain-3b7c640b5927). 
+# ForeverAward
+
+ForeverAward is a smart contract & associated factory, that lets anybody create a form of recognition and acknowledgment in a bottom-up way.  The award is made permanent on a blockchain.
+
+The idea is that any member of any organization or community could nominate anybody for any form of award.  Then, any number of other members of the community can endorse the nomination and award.  The more endorsements, the more weight the award carries. 
+
+This repo is a fork of the forevermore project.  Read the motivation for forevermore [here](https://medium.com/@nicolezhu/why-we-committed-our-marriage-vows-to-the-blockchain-3b7c640b5927). There is an unmaintained React front-end included in this repo, which hasn't been ported yet to the ForeverAward ABI yet.  It still matches the ABI from the forevermore contracts.
 
 ## Demo
-[Forevermore.io](https://forevermore.io)
 
-![alt text](https://user-images.githubusercontent.com/23445933/42493947-ff34cd6a-8448-11e8-828f-260d3fba8b1c.gif)
-
-## Build Status
+There is a demo of [Forevermore](https://forevermore.io), but the ForeverAward front-end isn't hosted anywhere - yet.
 
 ## Built Using
 
@@ -70,7 +72,7 @@ CD into Ethereum directory, then run:
  4. Push to the branch: `git push origin issue#-feature`
  5. Create a new Pull Request
 
-See full list of outstanding [issues](https://github.com/nczhu/forevermore/issues) here.
+See full list of outstanding [issues](https://github.com/jnmclarty/foreveraward/issues).
 
 ## License
 MIT License
