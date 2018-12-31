@@ -1,16 +1,16 @@
-pragma solidity ^0.4.19;
+pragma solidity ^0.5.2;
 
 contract CommunityAwardRegistry {
-    address [] public registeredAwards;
-    event ContractCreated(address contractAddress);
+    Award[] public registeredAwards;
+    event contract_created(Award contractAddress);
 
-    function createAward(string _awardTitle, string _nominatorName, string _awardInfo, string _recipientName, address _recipientAddr, uint _date) public {
-        address newAward = new Award(msg.sender, _nominatorName, _recipientAddr, _awardTitle, _awardInfo, _recipientName, _date);
-        emit ContractCreated(Award);
+    function createAward(string memory _awardTitle, string memory _nominatorName, string memory _awardInfo, string memory _recipientName, address payable _recipientAddr, uint _date) public {
+        Award newAward = new Award(msg.sender, _nominatorName, _recipientAddr, _awardTitle, _awardInfo, _recipientName, _date);
+        emit contract_created(newAward);
         registeredAwards.push(newAward);
     }
 
-    function getDeployedAwards() public view returns (address[]) {
+    function getDeployedAwards() public view returns (Award[] memory) {
         return registeredAwards;
     }
 }
@@ -22,10 +22,10 @@ contract CommunityAwardRegistry {
  */
 contract Award {
 
-    event endorse(address endorser, uint256 count);
+    event endorsement(address endorser, uint256 count);
 
     // Recipient address
-    address public recipient;
+    address payable public recipient;
     string public recipientName;
     
     // Endorsers
@@ -38,7 +38,7 @@ contract Award {
     uint public awardDate;
     
     uint256 public endorsmentCounter;
-
+    
     /**
     * @dev Throws if called by any account other than the owner
     */
@@ -52,7 +52,7 @@ contract Award {
     * commits the marriage details and vows to the blockchain
     */
     
-    constructor(address _nominatorAddr, string _nominatorName, address _recipientAddr, string _awardTitle, string _awardInfo, string _recipientName, uint _date) public {
+    constructor(address _nominatorAddr, string memory _nominatorName, address payable _recipientAddr, string memory _awardTitle, string memory _awardInfo, string memory _recipientName, uint _date) public {
         // TODO: Assert statements for year, month, day
         recipient = _recipientAddr;
         recipientName = _recipientName;
@@ -63,7 +63,7 @@ contract Award {
         awardTitle = _awardTitle;
         awardInfo = _awardInfo;
 
-        marriageDate = _date; 
+        awardDate = _date; 
     }
 
     /**
@@ -79,7 +79,7 @@ contract Award {
     * @dev ringBell is a payable function that allows people to celebrate the couple's marriage, and
     * also send Ether to the marriage contract
     */
-    function endorse(string _endorserName) public payable {
+    function endorse(string memory _endorserName) public payable {
         endorsmentCounter = add(1, endorsmentCounter);
         endorserAddresses.push(msg.sender);
         endorserNames.push(_endorserName);
@@ -100,14 +100,14 @@ contract Award {
         return address(this).balance;
     }
 
-    function getEndorserAddress(uint8 x) constant returns (address)
+    function getEndorserAddress(uint8 x) public view returns (address)
     {
         return endorserAddresses[x];
     }
 
-    function getEndorserName(uint8 x) constant returns (string)
+    function getEndorserName(uint8 x) public view returns (string memory)
     {
-        return endorserName[x];
+        return endorserNames[x];
     }
 
     
