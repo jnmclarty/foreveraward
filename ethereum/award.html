@@ -7,9 +7,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="theme.css" type="text/css">
   <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+  <script src="https://cdn.rawgit.com/alexvandesande/blockies/master/blockies.js"></script>
   <script type="text/javascript">
   
   Web3 = require('web3');
+  //blockies = require('blockies');
 
   var abi = [
 {
@@ -348,6 +350,39 @@ var awardABI = [
 var url = new URL(window.location.href);
 var addr = url.searchParams.get("addr");
 
+// ref lib: https://github.com/alexvandesande/blockies
+// ref settings: https://github.com/ethereum/meteor-package-elements/blob/master/identicon.js#L42
+// similar http://identicon.net/
+
+function renewIcon(innerAddr, outerAddr) {
+
+var innerIcon = blockies.create({ // All options are optional
+  seed: innerAddr, //cur_account, // seed used to generate icon data, default: random
+  color: '#111', // to manually specify the icon color, default: random
+  bgcolor: '#eee', // choose a different background color, default: random
+  size: 12, // width/height of the icon in blocks, default: 8
+  scale: 8, // width/height of each block in pixels, default: 4
+  spotcolor: '#224' // each pixel has a 13% chance of being of a third color, 
+  // default: random. Set to -1 to disable it. These "spots" create structures
+  // that look like eyes, mouths and noses. 
+});
+
+var outerIcon = blockies.create({ // All options are optional
+  seed: outerAddr, //cur_account, // seed used to generate icon data, default: random
+  color: '#111', // to manually specify the icon color, default: random
+  bgcolor: '#eee', // choose a different background color, default: random
+  size: 64, // width/height of the icon in blocks, default: 8
+  scale: 2, // width/height of each block in pixels, default: 4
+  spotcolor: '#522' // each pixel has a 13% chance of being of a third color, 
+  // default: random. Set to -1 to disable it. These "spots" create structures
+  // that look like eyes, mouths and noses. 
+});
+
+$('.award_pic').attr('src', innerIcon.toDataURL()); // icon is a canvas element
+$('.award_pic_outer').attr('src', outerIcon.toDataURL()); // icon is a canvas element
+}
+
+
 // var addr = "0x68752e06781fa53df580e34f2e0b060fa586c6f1";
 // var addr = "0x9e5aa801699f75913b50582878cf8b37bdac3f24";
 
@@ -361,7 +396,13 @@ var addr = url.searchParams.get("addr");
           /* window.web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/noapikey")); */
       }
 
-      var from_user = {from:"0xD9Df5a24e05111C14eAd75b26e7A0e12AC2A30e9"};
+      var cur_account;
+      web3.eth.getAccounts(function(error, accounts) {
+        cur_account = accounts[0];
+        console.log("Current Account: " + accounts[0])
+      });
+
+      var from_user = {from: cur_account}; //"0xD9Df5a24e05111C14eAd75b26e7A0e12AC2A30e9"};
 
       console.log(addr);
       var Award = web3.eth.contract(awardABI).at(addr);
@@ -390,14 +431,26 @@ var addr = url.searchParams.get("addr");
 
       Award.recipient.call(from_user, function(err, data) {
           document.getElementById("recipientName").title = data;
+          
+          renewIcon(addr, data);
+
+          console.log("recipient");
+          console.log(data);
+          console.log(cur_account);
+
+          if (data == cur_account) {
+          Award.getBalance.call(from_user, function(err, data) {
+            console.log("getBalance"); /* See https://ethereum.stackexchange.com/questions/22859/how-to-get-value-of-a-contract-public-property-using-web3-eth */
+            document.getElementById("collect").innerHTML = "Collect " + web3.fromWei(data, "ether") + " ETH";
+            document.getElementById("endorseFunctionality").hidden = true;
+            });
+          } else {
+            document.getElementById("collect").hidden = true;
+          }
+
           console.log(data);
       });
 
-      Award.getBalance.call(from_user, function(err, data) {
-          console.log("getBalance"); /* See https://ethereum.stackexchange.com/questions/22859/how-to-get-value-of-a-contract-public-property-using-web3-eth */
-          document.getElementById("collect").innerHTML = "Collect " + web3.fromWei(data, "ether") + " ETH";
-          console.log(data.toString());
-      });
 
       function setItem(id){
         Award.getEndorserName.call(id, from_user, function(err, data) {
@@ -408,6 +461,10 @@ var addr = url.searchParams.get("addr");
         Award.getEndorserAddress.call(id, from_user, function(err, data) {
           if (!(data == null || data === "")) {
             document.getElementById(id).title = data;
+
+            if(data == cur_account) {
+              document.getElementById("endorseFunctionality").hidden = true;
+            }
           }
         });
 
@@ -453,6 +510,12 @@ function getBalance() {
 }
 function endorse() {
 
+  var cur_account;
+  web3.eth.getAccounts(function(error, accounts) {
+    cur_account = accounts[0];
+    console.log("Current Account: " + accounts[0])
+  });
+
   var endorsementValue = document.getElementById("endorseValue").value;
   var endorsementName = document.getElementById("endorserName").value;
 
@@ -461,7 +524,7 @@ function endorse() {
   console.log(endorsementValue);
   console.log(endorsementName);
 
-  var payload = {'from' : "0xD9Df5a24e05111C14eAd75b26e7A0e12AC2A30e9",
+  var payload = {'from' : cur_account, //"0xD9Df5a24e05111C14eAd75b26e7A0e12AC2A30e9",
                  'value' : endorsementValue};
 
   var Award = web3.eth.contract(awardABI).at(addr);
@@ -470,7 +533,13 @@ function endorse() {
 
 function collect() {
 
-var payload = {'from' : "0x14A0070324Cb72F9E70499dE6C6e870A1021802d"};
+var cur_account;
+web3.eth.getAccounts(function(error, accounts) {
+  cur_account = accounts[0];
+  console.log("Current Account: " + accounts[0])
+});
+
+var payload = {'from' : cur_account}; //"0x14A0070324Cb72F9E70499dE6C6e870A1021802d"};
 
 var Award = web3.eth.contract(awardABI).at(addr);
 Award.collect(payload, function (hash) {console.log(hash)});
@@ -490,14 +559,20 @@ Award.collect(payload, function (hash) {console.log(hash)});
         <div class="col-md-12">
           <div class="card">
             <div class="card-body">
-              <h4 class="card-title"><b><span id="awardTitle">Award Title</span></b></h4>
-              <h6 class="card-subtitle my-2">Awarded to <b><span id="recipientName" data-toggle="tooltip" data-placement="right" title="0x...">Recipient</span></b> on <b><span id="awardDate">Date</span></b></h6>
-              <p class="card-text"><span id="awardInfo">Award Info Info Info Info...</span></p>
+              <div class="row">
+                <div class="col-sm-9">
+                  <h4 class="card-title"><b><span id="awardTitle">Award Title</span></b></h4>
+                  <h6 class="card-subtitle my-2">Awarded to <b><span id="recipientName" data-toggle="tooltip" data-placement="right" title="0x...">Recipient</span></b> on <b><span id="awardDate">Date</span></b></h6>
+                  <p class="card-text"><span id="awardInfo">Award Info Info Info Info...</span></p>
+                </div>
+                
+                <div class="col-sm-3"><img class="award_pic" style="border-radius: 100%; z-index: 10; position: absolute; padding: 24px;"/><img class="award_pic_outer" style="border-radius: 100%; border-style: dashed; border-width: 8px;"/></div>
+              </div>
               <h5 class="">Endorsed by</h5>
               <ol id="endorsers" class="">
               </ol>
               
-              <div class="row">
+              <div id="endorseFunctionality" class="row">
                 <div class="col-sm-3"><input id="endorseValue" class="form-control" type="text" placeholder=0.01 value=0.01></div>
                 <div class="col-sm-6"><input id="endorserName" class="form-control" type="text" placeholder="Anonymous"></div>
                 <div class="col-sm-3"><a class="btn btn-primary" onclick="endorse();" href="#" style="border-top-width: 0px; border-bottom-width: 0px; border-radius: 3px; box-shadow: black 0px 0px 4px, black 0px 0px 4px;">Endorse</a></div>
