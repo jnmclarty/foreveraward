@@ -4,27 +4,11 @@ ForeverAward is a smart contract & associated factory, that lets anybody create 
 
 The idea is that any member of any organization or community could nominate anybody for any form of award.  Then, any number of other members of the community can endorse the nomination and award.  The more endorsements, the more weight the award carries. 
 
-This repo is a fork of the forevermore project.  Read the motivation for forevermore [here](https://medium.com/@nicolezhu/why-we-committed-our-marriage-vows-to-the-blockchain-3b7c640b5927). There is an unmaintained React front-end included in this repo, which hasn't been ported yet to the ForeverAward ABI yet.  It still matches the ABI from the forevermore contracts.
+This repo is a fork of the forevermore project.  Read the motivation for forevermore [here](https://medium.com/@nicolezhu/why-we-committed-our-marriage-vows-to-the-blockchain-3b7c640b5927). 
 
 ## Demo
 
-There is a demo of [Forevermore](https://forevermore.io), but the ForeverAward front-end isn't hosted anywhere - yet.
-
-## Built Using
-
- - [Next.js](https://nextjs.org/)
- - [Semantic UI](https://react.semantic-ui.com/) for React
-
-## Setup
-Prerequisite: [set up Metamask](https://www.cryptokitties.co/faq#Installing-MetaMask-your-digital-wallet) 
-
-Install project dependencies:
-
-    $ npm install
-
-Start the app
-
-    $ npm run dev
+There is a demo of [Forevermore](https://forevermore.io), but the ForeverAward front-end isn't finished - yet, despite there actually being one award created with this code live on mainnet.
 
 **To compile your own contracts:**
 CD into Ethereum directory, then run: 

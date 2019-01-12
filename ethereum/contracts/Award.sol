@@ -109,23 +109,18 @@ contract Award {
     {
         return endorserNames[x];
     }
-
-    
-    /**
-    * @dev returns contract metadata in one function call, rather than separate .call()s
-    * Not sure if this works yet
     
     function getAwardDetails() public view returns (
-        address, string, string, string, address [], string [], uint, uint256) {
+        address, string memory, string memory, string memory, address [] memory, string memory, uint, uint256) {
         return (
             recipient,
             recipientName,
             awardTitle,
             awardInfo,
             endorserAddresses,
-            endorserNames,
+            endorserNames[0],
             awardDate,
             endorsmentCounter
         );
-    } */
+    }
 }
