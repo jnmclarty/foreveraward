@@ -441,7 +441,12 @@ $('.award_pic_outer').attr('src', outerIcon.toDataURL()); // icon is a canvas el
           if (data == cur_account) {
           Award.getBalance.call(from_user, function(err, data) {
             console.log("getBalance"); /* See https://ethereum.stackexchange.com/questions/22859/how-to-get-value-of-a-contract-public-property-using-web3-eth */
-            document.getElementById("collect").innerHTML = "Collect " + web3.fromWei(data, "ether") + " ETH";
+            if (data == 0) {
+              document.getElementById("collect").innerHTML = "No ETH to Collect!";
+            } else {
+              document.getElementById("collect").innerHTML = "Collect " + web3.fromWei(data, "ether") + " ETH";
+            
+            }
             document.getElementById("endorseFunctionality").hidden = true;
             });
           } else {
@@ -514,21 +519,22 @@ function endorse() {
   web3.eth.getAccounts(function(error, accounts) {
     cur_account = accounts[0];
     console.log("Current Account: " + accounts[0])
+
+    var endorsementValue = document.getElementById("endorseValue").value;
+    var endorsementName = document.getElementById("endorserName").value;
+
+    endorsementValue = web3.toWei(endorsementValue, "ether");
+
+    console.log(endorsementValue);
+    console.log(endorsementName);
+
+    var payload = {'from' : cur_account, //"0xD9Df5a24e05111C14eAd75b26e7A0e12AC2A30e9",
+                  'value' : endorsementValue};
+
+    var Award = web3.eth.contract(awardABI).at(addr);
+    Award.endorse(endorsementName, payload, function (hash) {console.log(hash)});
+    
   });
-
-  var endorsementValue = document.getElementById("endorseValue").value;
-  var endorsementName = document.getElementById("endorserName").value;
-
-  endorsementValue = web3.toWei(endorsementValue, "ether");
-
-  console.log(endorsementValue);
-  console.log(endorsementName);
-
-  var payload = {'from' : cur_account, //"0xD9Df5a24e05111C14eAd75b26e7A0e12AC2A30e9",
-                 'value' : endorsementValue};
-
-  var Award = web3.eth.contract(awardABI).at(addr);
-  Award.endorse(endorsementName, payload, function (hash) {console.log(hash)});
 }
 
 function collect() {
@@ -537,12 +543,12 @@ var cur_account;
 web3.eth.getAccounts(function(error, accounts) {
   cur_account = accounts[0];
   console.log("Current Account: " + accounts[0])
-});
+  var payload = {'from' : cur_account}; //"0x14A0070324Cb72F9E70499dE6C6e870A1021802d"};
 
-var payload = {'from' : cur_account}; //"0x14A0070324Cb72F9E70499dE6C6e870A1021802d"};
+  var Award = web3.eth.contract(awardABI).at(addr);
+  Award.collect(payload, function (hash) {console.log(hash)});
+  });
 
-var Award = web3.eth.contract(awardABI).at(addr);
-Award.collect(payload, function (hash) {console.log(hash)});
 }
 </script>
 
