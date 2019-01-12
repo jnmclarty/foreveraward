@@ -365,7 +365,7 @@ $('.award_pic_outer').attr('src', outerIcon.toDataURL()); // icon is a canvas el
       var from_user = {from: cur_account}; //"0xD9Df5a24e05111C14eAd75b26e7A0e12AC2A30e9"};
 
       console.log(addr);
-      var Award = web3.eth.contract(awardABI).at(addr);
+      var Award = web3.eth.contract(abi).at(addr);
 
       Award.awardTitle.call(from_user, function(err, data) {
           document.getElementById("awardTitle").innerHTML = data;
@@ -405,7 +405,6 @@ $('.award_pic_outer').attr('src', outerIcon.toDataURL()); // icon is a canvas el
               document.getElementById("collect").innerHTML = "No ETH to Collect!";
             } else {
               document.getElementById("collect").innerHTML = "Collect " + web3.fromWei(data, "ether") + " ETH";
-            
             }
             document.getElementById("endorseFunctionality").hidden = true;
             });
@@ -491,7 +490,7 @@ function endorse() {
     var payload = {'from' : cur_account, //"0xD9Df5a24e05111C14eAd75b26e7A0e12AC2A30e9",
                   'value' : endorsementValue};
 
-    var Award = web3.eth.contract(awardABI).at(addr);
+    var Award = web3.eth.contract(abi).at(addr);
     Award.endorse(endorsementName, payload, function (hash) {console.log(hash)});
     
   });
@@ -505,7 +504,7 @@ web3.eth.getAccounts(function(error, accounts) {
   console.log("Current Account: " + accounts[0])
   var payload = {'from' : cur_account}; //"0x14A0070324Cb72F9E70499dE6C6e870A1021802d"};
 
-  var Award = web3.eth.contract(awardABI).at(addr);
+  var Award = web3.eth.contract(abi).at(addr);
   Award.collect(payload, function (hash) {console.log(hash)});
   });
 
