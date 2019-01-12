@@ -14,337 +14,297 @@
   //blockies = require('blockies');
 
   var abi = [
-{
-"anonymous": false,
-"inputs": [
-{
-  "indexed": false,
-  "name": "contractAddress",
-  "type": "address"
-}
-],
-"name": "contract_created",
-"type": "event"
-},
-{
-"constant": false,
-"inputs": [
-{
-  "name": "_awardTitle",
-  "type": "string"
-},
-{
-  "name": "_nominatorName",
-  "type": "string"
-},
-{
-  "name": "_awardInfo",
-  "type": "string"
-},
-{
-  "name": "_recipientName",
-  "type": "string"
-},
-{
-  "name": "_recipientAddr",
-  "type": "address"
-},
-{
-  "name": "_date",
-  "type": "uint256"
-}
-],
-"name": "createAward",
-"outputs": [],
-"payable": false,
-"stateMutability": "nonpayable",
-"type": "function"
-},
-{
-"constant": true,
-"inputs": [],
-"name": "getDeployedAwards",
-"outputs": [
-{
-  "name": "",
-  "type": "address[]"
-}
-],
-"payable": false,
-"stateMutability": "view",
-"type": "function"
-},
-{
-"constant": true,
-"inputs": [
-{
-  "name": "",
-  "type": "uint256"
-}
-],
-"name": "registeredAwards",
-"outputs": [
-{
-  "name": "",
-  "type": "address"
-}
-],
-"payable": false,
-"stateMutability": "view",
-"type": "function"
-}
-];
-
-var awardABI = [
-{
-"anonymous": false,
-"inputs": [
-{
-  "indexed": false,
-  "name": "endorser",
-  "type": "address"
-},
-{
-  "indexed": false,
-  "name": "count",
-  "type": "uint256"
-}
-],
-"name": "endorsement",
-"type": "event"
-},
-{
-"constant": false,
-"inputs": [],
-"name": "collect",
-"outputs": [],
-"payable": false,
-"stateMutability": "nonpayable",
-"type": "function"
-},
-{
-"constant": false,
-"inputs": [
-{
-  "name": "_endorserName",
-  "type": "string"
-}
-],
-"name": "endorse",
-"outputs": [],
-"payable": true,
-"stateMutability": "payable",
-"type": "function"
-},
-{
-"inputs": [
-{
-  "name": "_nominatorAddr",
-  "type": "address"
-},
-{
-  "name": "_nominatorName",
-  "type": "string"
-},
-{
-  "name": "_recipientAddr",
-  "type": "address"
-},
-{
-  "name": "_awardTitle",
-  "type": "string"
-},
-{
-  "name": "_awardInfo",
-  "type": "string"
-},
-{
-  "name": "_recipientName",
-  "type": "string"
-},
-{
-  "name": "_date",
-  "type": "uint256"
-}
-],
-"payable": false,
-"stateMutability": "nonpayable",
-"type": "constructor"
-},
-{
-"constant": true,
-"inputs": [],
-"name": "awardDate",
-"outputs": [
-{
-  "name": "",
-  "type": "uint256"
-}
-],
-"payable": false,
-"stateMutability": "view",
-"type": "function"
-},
-{
-"constant": true,
-"inputs": [],
-"name": "awardInfo",
-"outputs": [
-{
-  "name": "",
-  "type": "string"
-}
-],
-"payable": false,
-"stateMutability": "view",
-"type": "function"
-},
-{
-"constant": true,
-"inputs": [],
-"name": "awardTitle",
-"outputs": [
-{
-  "name": "",
-  "type": "string"
-}
-],
-"payable": false,
-"stateMutability": "view",
-"type": "function"
-},
-{
-"constant": true,
-"inputs": [
-{
-  "name": "",
-  "type": "uint256"
-}
-],
-"name": "endorserAddresses",
-"outputs": [
-{
-  "name": "",
-  "type": "address"
-}
-],
-"payable": false,
-"stateMutability": "view",
-"type": "function"
-},
-{
-"constant": true,
-"inputs": [
-{
-  "name": "",
-  "type": "uint256"
-}
-],
-"name": "endorserNames",
-"outputs": [
-{
-  "name": "",
-  "type": "string"
-}
-],
-"payable": false,
-"stateMutability": "view",
-"type": "function"
-},
-{
-"constant": true,
-"inputs": [],
-"name": "endorsmentCounter",
-"outputs": [
-{
-  "name": "",
-  "type": "uint256"
-}
-],
-"payable": false,
-"stateMutability": "view",
-"type": "function"
-},
-{
-"constant": true,
-"inputs": [],
-"name": "getBalance",
-"outputs": [
-{
-  "name": "",
-  "type": "uint256"
-}
-],
-"payable": false,
-"stateMutability": "view",
-"type": "function"
-},
-{
-"constant": true,
-"inputs": [
-{
-  "name": "x",
-  "type": "uint8"
-}
-],
-"name": "getEndorserAddress",
-"outputs": [
-{
-  "name": "",
-  "type": "address"
-}
-],
-"payable": false,
-"stateMutability": "view",
-"type": "function"
-},
-{
-"constant": true,
-"inputs": [
-{
-  "name": "x",
-  "type": "uint8"
-}
-],
-"name": "getEndorserName",
-"outputs": [
-{
-  "name": "",
-  "type": "string"
-}
-],
-"payable": false,
-"stateMutability": "view",
-"type": "function"
-},
-{
-"constant": true,
-"inputs": [],
-"name": "recipient",
-"outputs": [
-{
-  "name": "",
-  "type": "address"
-}
-],
-"payable": false,
-"stateMutability": "view",
-"type": "function"
-},
-{
-"constant": true,
-"inputs": [],
-"name": "recipientName",
-"outputs": [
-{
-  "name": "",
-  "type": "string"
-}
-],
-"payable": false,
-"stateMutability": "view",
-"type": "function"
-}
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getBalance",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "endorserNames",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_endorserName",
+				"type": "string"
+			}
+		],
+		"name": "endorse",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "recipientName",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "x",
+				"type": "uint8"
+			}
+		],
+		"name": "getEndorserName",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "recipient",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "awardTitle",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getAwardDetails",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			},
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "address[]"
+			},
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "awardDate",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "awardInfo",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "endorsmentCounter",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "endorserAddresses",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "collect",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "x",
+				"type": "uint8"
+			}
+		],
+		"name": "getEndorserAddress",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"name": "_nominatorAddr",
+				"type": "address"
+			},
+			{
+				"name": "_nominatorName",
+				"type": "string"
+			},
+			{
+				"name": "_recipientAddr",
+				"type": "address"
+			},
+			{
+				"name": "_awardTitle",
+				"type": "string"
+			},
+			{
+				"name": "_awardInfo",
+				"type": "string"
+			},
+			{
+				"name": "_recipientName",
+				"type": "string"
+			},
+			{
+				"name": "_date",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "endorser",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "count",
+				"type": "uint256"
+			}
+		],
+		"name": "endorsement",
+		"type": "event"
+	}
 ];
 
 var url = new URL(window.location.href);
