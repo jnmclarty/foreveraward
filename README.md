@@ -1,28 +1,14 @@
-# Forevermore
-Forevermore is a smart contract, with a React front-end, that lets you commit your marriage vows to the blockchain. Read the motivation for this project [here](https://medium.com/@nicolezhu/why-we-committed-our-marriage-vows-to-the-blockchain-3b7c640b5927). 
+# ForeverAward
+
+ForeverAward is a smart contract & associated factory, that lets anybody create a form of recognition and acknowledgment in a bottom-up way.  The award is made permanent on a blockchain.
+
+The idea is that any member of any organization or community could nominate anybody for any form of award.  Then, any number of other members of the community can endorse the nomination and award.  The more endorsements, the more weight the award carries. 
+
+This repo is a fork of the forevermore project.  Read the motivation for forevermore [here](https://medium.com/@nicolezhu/why-we-committed-our-marriage-vows-to-the-blockchain-3b7c640b5927). 
 
 ## Demo
-[Forevermore.io](https://forevermore.io)
 
-![alt text](https://user-images.githubusercontent.com/23445933/42493947-ff34cd6a-8448-11e8-828f-260d3fba8b1c.gif)
-
-## Build Status
-
-## Built Using
-
- - [Next.js](https://nextjs.org/)
- - [Semantic UI](https://react.semantic-ui.com/) for React
-
-## Setup
-Prerequisite: [set up Metamask](https://www.cryptokitties.co/faq#Installing-MetaMask-your-digital-wallet) 
-
-Install project dependencies:
-
-    $ npm install
-
-Start the app
-
-    $ npm run dev
+There is a demo of [Forevermore](https://forevermore.io), but the ForeverAward front-end isn't finished - yet, despite there actually being one award created with this code live on mainnet.
 
 **To compile your own contracts:**
 CD into Ethereum directory, then run: 
@@ -70,7 +56,7 @@ CD into Ethereum directory, then run:
  4. Push to the branch: `git push origin issue#-feature`
  5. Create a new Pull Request
 
-See full list of outstanding [issues](https://github.com/nczhu/forevermore/issues) here.
+See full list of outstanding [issues](https://github.com/jnmclarty/foreveraward/issues).
 
 ## License
 MIT License
