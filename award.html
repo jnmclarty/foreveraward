@@ -309,6 +309,8 @@
 
 var url = new URL(window.location.href);
 var addr = url.searchParams.get("addr");
+var ee = url.searchParams.get("ee");
+console.log(ee);
 
 // ref lib: https://github.com/alexvandesande/blockies
 // ref settings: https://github.com/ethereum/meteor-package-elements/blob/master/identicon.js#L42
@@ -346,6 +348,7 @@ $('.award_pic_outer').attr('src', outerIcon.toDataURL()); // icon is a canvas el
 // var addr = "0x68752e06781fa53df580e34f2e0b060fa586c6f1";
 // var addr = "0x9e5aa801699f75913b50582878cf8b37bdac3f24";
 
+
   window.addEventListener('load', function () {
       if (typeof web3 !== 'undefined') {
           console.log('Web3 Detected! '); // + web3.arguments + Object.getOwnPropertyNames(web3.arguments))
@@ -355,6 +358,10 @@ $('.award_pic_outer').attr('src', outerIcon.toDataURL()); // icon is a canvas el
           console.log('No Web3 Detected.  Please install MetaMask or equivalent wallet.')
           /* window.web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/noapikey")); */
       }
+
+			if (Boolean(ee) != true) {
+				document.getElementById("endorseFunctionality").hidden = true;
+			}
 
       var cur_account;
       web3.eth.getAccounts(function(error, accounts) {
