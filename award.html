@@ -356,6 +356,7 @@ $('.award_pic_outer').attr('src', outerIcon.toDataURL()); // icon is a canvas el
           window.web3 = new Web3(web3.currentProvider);   
       } else {
           console.log('No Web3 Detected.  Please install MetaMask or equivalent wallet.')
+					document.getElementById("award_container").innerHTML = "<h1>Please install a Web 3.0 provider</h1><p>A web 3.0 provider could not be detected.  Please ensure your internet is enabled to connect to the latest and greatest parts of the web!  ForeverAward recommends <a href='https://metamask.io/'>MetaMask</a>.";
           /* window.web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/noapikey")); */
       }
 
@@ -526,7 +527,7 @@ web3.eth.getAccounts(function(error, accounts) {
 
 <body>
   <div class="py-5">
-    <div class="container">
+    <div class="container" id="award_container">
       <div class="row">
         <div class="col-md-12">
           <div class="card">
